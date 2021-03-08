@@ -128,15 +128,20 @@ public class SpamFilter extends ApplicationException
 							//Word
 							if (!hit.containsKey(word))
 							{
-								//Calc Ham Probability
-								//Calc Spam Probability
-								//Calc Full Probability
-								hit.put(word, 0);
+								double hamProb = (this.ratings[word]["ham"] / this.totals["ham"]);
+								double spamProb = (this.ratings[word]["spam"] / this.totals["spam"]);
+								double fullProb = (spamProb / (spamProb + hamProb));
+								hit.put(word, fullProb);
 							}
 						}
 					}
-					//calc Email prob using hits
-					emails.add(new Email("", currClass, 0));
+					double hitSum = 0;
+					items.forEach((k, v) -> 
+					{
+						hitSum += (Math.log(1 - v) - Math.log(v));
+					});
+					double finalProb = 1 / 1 + Math.exp(hitSum);
+					emails.add(new Email(f.getName(), currClass, 0));
 				}
 			}
 			return emails;
