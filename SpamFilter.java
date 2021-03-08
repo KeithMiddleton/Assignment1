@@ -1,4 +1,4 @@
-import java.text.DecimalFormat;
+import java.text.DecimalFormat
 import java.util.List;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
