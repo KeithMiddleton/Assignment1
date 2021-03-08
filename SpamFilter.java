@@ -71,52 +71,74 @@ public class SpamFilter extends ApplicationException
 			{
 				//Class
 				string currClass = dir.getName();
-				List<String> lines = Files.readAllLines(dir, Charset.defaultCharset());
-				this.totals.put(currClass, dir.listFiles().length);
-				for (String line : lines)
+				for (File f : dir.listFiles())
 				{
-					//Split to words and create / set values in ratings
-					String[] words = line.split(" ");
-					for (String word : words)
+					//Email
+					List<String> covered = new ArrayList<String>();
+					List<String> lines = Files.readAllLines(f.getAbsolutePath(), Charset.defaultCharset);
+					for (String line : lines)
 					{
-						if (!this.ratings.containsKey(word))
+						//Line
+						String[] words = line.split(" ");
+						for (String word : words)
 						{
-							//Add Word Key
-							this.ratings.put(word, new HashMap<String, int>());
+							if (!covered.contains(word))
+							{
+								if (!this.ratings.containsKey(word))
+								{
+									this.ratings.put(word, new HashMap<String, int>());
+								}
+								if (!this.ratings[word].containsKey(currClass))
+								{
+									this.ratings[word].put(currClass, 0);
+								}
+								this.ratings[word][currClass]++;
+								covered.add(word);
+							}
 						}
-						if (!this.ratings[word].containsKey(currClass))
-						{
-							//Add Class Key
-							this.ratings.put(currClass, 0);
-						}
-						this.ratings[word][class]++;
 					}
+					if (!this.totals.containsKey(currClass))
+					{
+						this.totals.put(currClass, 0);
+					}
+					this.totals[currClass]++;
 				}
 			}
 		}
 		
 		public ObservableList<Email> getEmails()
 		{
+			ObservableList<Email> emails = FXCollections.observableArrayList();
 			File[] fileList = new File(this.directory + "\\test").listFiles();
 			for (File dir : fileList)
 			{
+				//Class
 				string currClass = dir.getName();
 				for (File f : dir.listFiles())
 				{
+					//File
 					List<String> lines = Files.readAllLines(f.getAbsolutePath(), Charset.defaultCharset());
+					HashMap<String, double> hit = new HashMap<String, double>();
 					for (String line : lines)
 					{
+						//Line
 						String[] words = line.split(" ");
 						for (String word : words)
 						{
-							
-							
+							//Word
+							if (!hit.containsKey(word))
+							{
+								//Calc Ham Probability
+								//Calc Spam Probability
+								//Calc Full Probability
+								hit.put(word, 0);
+							}
 						}
 					}
+					//calc Email prob using hits
+					emails.add(new Email("", currClass, 0));
 				}
 			}
-			ObservableList<Email> emails = FXCollections.observableArrayList();
-			
 			return emails;
 		}
 	}
