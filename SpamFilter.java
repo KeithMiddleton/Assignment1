@@ -89,24 +89,24 @@ public class SpamFilter extends Application
 					try {
   							lines = Files.readAllLines(f.toPath(), cs);
 					}
-					catch (MalformedInputException m1)
+					catch (java.nio.charset.MalformedInputException a)
 					{
 						try {
 							lines = Files.readAllLines(f.toPath(), StandardCharsets.ISO_8859_1);
 						}
-						catch (MalformedInputException m2)
+						catch (java.nio.charset.MalformedInputException s)
 						{
 							try {
 								lines = Files.readAllLines(f.toPath(), StandardCharsets.US_ASCII);
 							}
-							catch (MalformedInputException m3)
+							catch (java.nio.charset.MalformedInputException d)
 							{
 								try {
 									lines = Files.readAllLines(f.toPath(), StandardCharsets.UTF_16);
 								}
-								catch (MalformedInputException m4)
+								catch (java.nio.charset.MalformedInputException j)
 								{
-									m4.printStackTrace();
+									j.printStackTrace();
 								}
 							}
 						}
