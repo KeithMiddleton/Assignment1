@@ -99,7 +99,7 @@ public class SpamFilter extends Application
 								{
 									this.ratings.get(word).put(currClass, 0);
 								}
-								this.ratings.get(word).get(currClass)++;
+								this.ratings.get(word).put(currClass, this.ratings.get(word).get(currClass) + 1);
 								covered.add(word);
 							}
 						}
@@ -108,7 +108,7 @@ public class SpamFilter extends Application
 					{
 						this.totals.put(currClass, 0);
 					}
-					this.totals.get(currClass)++;
+					this.totals.put(currClass, this.totals.get(currClass) + 1);
 				}
 			}
 		}
