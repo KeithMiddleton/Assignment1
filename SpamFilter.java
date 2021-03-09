@@ -57,13 +57,14 @@ public class SpamFilter extends Application
 	public class DataSource
 	{
 		private String directory;
-		private HashMap<String, HashMap<String, int>> ratings;
+		private HashMap<String, HashMap<String, Integer>> ratings;
+		private HashMap<String, Integer> totals;
 		
 		public DataSource(String dir)
 		{
 			this.directory = dir;
-			this.ratings = new HashMap<String, HashMap<String, int>>();
-			this.totals = new HashMap<String, int>();
+			this.ratings = new HashMap<String, HashMap<String, Integer>>();
+			this.totals = new HashMap<String, Integer>();
 			//"word" : { "class1" : 0, "class2" : 0.5, "class3" : 0.5 }
 		}
 		
@@ -73,7 +74,7 @@ public class SpamFilter extends Application
 			for (File dir : fileList)
 			{
 				//Class
-				string currClass = dir.getName();
+				String currClass = dir.getName();
 				for (File f : dir.listFiles())
 				{
 					//Email
@@ -89,7 +90,7 @@ public class SpamFilter extends Application
 							{
 								if (!this.ratings.containsKey(word))
 								{
-									this.ratings.put(word, new HashMap<String, int>());
+									this.ratings.put(word, new HashMap<String, Integer>());
 								}
 								if (!this.ratings[word].containsKey(currClass))
 								{
@@ -116,12 +117,12 @@ public class SpamFilter extends Application
 			for (File dir : fileList)
 			{
 				//Class
-				string currClass = dir.getName();
+				String currClass = dir.getName();
 				for (File f : dir.listFiles())
 				{
 					//File
 					List<String> lines = Files.readAllLines(f.getAbsolutePath(), Charset.defaultCharset());
-					HashMap<String, double> hit = new HashMap<String, double>();
+					HashMap<String, Double> hit = new HashMap<String, Double>();
 					for (String line : lines)
 					{
 						//Line
