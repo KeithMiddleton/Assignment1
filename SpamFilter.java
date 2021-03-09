@@ -1,4 +1,4 @@
-import java.text.DecimalFormat
+import java.text.DecimalFormat;
 import java.util.List;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -22,8 +22,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
-public class SpamFilter extends ApplicationException
+public class SpamFilter extends Application
 {
 	public class Email
 	{
