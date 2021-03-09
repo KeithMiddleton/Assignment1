@@ -24,9 +24,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.*;
 import java.util.*;
 import javafx.stage.DirectoryChooser;
+import java.nio.charset.StandardCharsets;
 
 public class SpamFilter extends Application
 {
@@ -81,8 +83,16 @@ public class SpamFilter extends Application
 				{
 					//Email
 					List<String> covered = new ArrayList<String>();
-					Charset cs = Charset.defaultCharset();
-					List<String> lines = Files.readAllLines(Paths.get(f.getAbsolutePath()), cs);
+					Charset cs = StandardCharsets.US_ASCII;
+					List<String> lines = null;
+					System.out.println(f.getAbsolutePath());
+					try {
+  							lines = Files.readAllLines(f.toPath(), cs);
+					}
+					catch(Exception e) {
+  							e.printStackTrace();
+					}
+
 					for (String line : lines)
 					{
 						//Line
@@ -124,7 +134,15 @@ public class SpamFilter extends Application
 				for (File f : dir.listFiles())
 				{
 					//File
-					List<String> lines = Files.readAllLines(Paths.get(f.getAbsolutePath()), Charset.defaultCharset());
+					List<String> lines = null;
+					Charset cs = StandardCharsets.US_ASCII;
+					try {
+  							lines = Files.readAllLines(f.toPath(), cs);
+					}
+					catch(Exception e) {
+  							e.printStackTrace();
+					}
+					
 					HashMap<String, Double> hits = new HashMap<String, Double>();
 					for (String line : lines)
 					{
@@ -143,10 +161,10 @@ public class SpamFilter extends Application
 						}
 					}
 					double hitSum = 0;
-					hits.forEach((k, v) -> 
+					for(Map.Entry<String, Double> entry : hits.entrySet())
 					{
-						hitSum += (Math.log(1 - v) - Math.log(v));
-					});
+						hitSum += (Math.log(1 - entry.getValue()) - Math.log(entry.getValue()));
+					}
 					double finalProb = 1 / 1 + Math.exp(hitSum);
 					emails.add(new Email(f.getName(), currClass, 0));
 				}
