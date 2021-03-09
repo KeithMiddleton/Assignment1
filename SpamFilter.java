@@ -3,6 +3,7 @@ import java.util.List;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.Path;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,7 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.io.*;
 import java.util.*;
+import javafx.stage.DirectoryChooser;
 
 public class SpamFilter extends Application
 {
@@ -79,7 +81,8 @@ public class SpamFilter extends Application
 				{
 					//Email
 					List<String> covered = new ArrayList<String>();
-					List<String> lines = Files.readAllLines(f.getAbsolutePath(), Charset.defaultCharset);
+					Charset cs = Charset.defaultCharset();
+					List<String> lines = Files.readAllLines(Paths.get(f.getAbsolutePath()), cs);
 					for (String line : lines)
 					{
 						//Line
@@ -121,8 +124,8 @@ public class SpamFilter extends Application
 				for (File f : dir.listFiles())
 				{
 					//File
-					List<String> lines = Files.readAllLines(f.getAbsolutePath(), Charset.defaultCharset());
-					HashMap<String, Double> hit = new HashMap<String, Double>();
+					List<String> lines = Files.readAllLines(Paths.get(f.getAbsolutePath()), Charset.defaultCharset());
+					HashMap<String, Double> hits = new HashMap<String, Double>();
 					for (String line : lines)
 					{
 						//Line
@@ -130,17 +133,17 @@ public class SpamFilter extends Application
 						for (String word : words)
 						{
 							//Word
-							if (!hit.containsKey(word))
+							if (!hits.containsKey(word))
 							{
 								double hamProb = (this.ratings.get(word).get("ham") / this.totals.get("ham"));
 								double spamProb = (this.ratings.get(word).get("spam") / this.totals.get("spam"));
 								double fullProb = (spamProb / (spamProb + hamProb));
-								hit.put(word, fullProb);
+								hits.put(word, fullProb);
 							}
 						}
 					}
 					double hitSum = 0;
-					items.forEach((k, v) -> 
+					hits.forEach((k, v) -> 
 					{
 						hitSum += (Math.log(1 - v) - Math.log(v));
 					});
