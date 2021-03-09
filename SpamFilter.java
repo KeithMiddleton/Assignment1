@@ -36,7 +36,7 @@ public class SpamFilter extends Application
 		private double spamProbability;
 		private String actualClass;
 		
-		public Email(String filename, double spamProbability, String actualClass)
+		public Email(String filename, String actualClass, double spamProbability)
 		{
 			this.filename = filename;
 			this.spamProbability = spamProbability;
