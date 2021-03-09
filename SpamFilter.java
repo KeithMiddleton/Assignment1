@@ -83,13 +83,36 @@ public class SpamFilter extends Application
 				{
 					//Email
 					List<String> covered = new ArrayList<String>();
-					Charset cs = StandardCharsets.US_ASCII;
+					Charset cs = StandardCharsets.UTF_8;
 					List<String> lines = null;
 					System.out.println(f.getAbsolutePath());
 					try {
   							lines = Files.readAllLines(f.toPath(), cs);
 					}
-					catch(Exception e) {
+					catch (MalformedInputException m1)
+					{
+						try {
+							lines = Files.readAllLines(f.toPath(), StandardCharsets.ISO_8859_1);
+						}
+						catch (MalformedInputException m2)
+						{
+							try {
+								lines = Files.readAllLines(f.toPath(), StandardCharsets.US_ASCII);
+							}
+							catch (MalformedInputException m3)
+							{
+								try {
+									lines = Files.readAllLines(f.toPath(), StandardCharsets.UTF_16);
+								}
+								catch (MalformedInputException m4)
+								{
+									m4.printStackTrace();
+								}
+							}
+						}
+					}
+					catch (Exception e) 
+					{
   							e.printStackTrace();
 					}
 
