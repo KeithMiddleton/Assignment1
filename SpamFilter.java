@@ -92,11 +92,11 @@ public class SpamFilter extends Application
 								{
 									this.ratings.put(word, new HashMap<String, Integer>());
 								}
-								if (!this.ratings[word].containsKey(currClass))
+								if (!this.ratings.get(word).containsKey(currClass))
 								{
-									this.ratings[word].put(currClass, 0);
+									this.ratings.get(word).put(currClass, 0);
 								}
-								this.ratings[word][currClass]++;
+								this.ratings.get(word).get(currClass)++;
 								covered.add(word);
 							}
 						}
@@ -105,7 +105,7 @@ public class SpamFilter extends Application
 					{
 						this.totals.put(currClass, 0);
 					}
-					this.totals[currClass]++;
+					this.totals.get(currClass)++;
 				}
 			}
 		}
@@ -132,8 +132,8 @@ public class SpamFilter extends Application
 							//Word
 							if (!hit.containsKey(word))
 							{
-								double hamProb = (this.ratings[word]["ham"] / this.totals["ham"]);
-								double spamProb = (this.ratings[word]["spam"] / this.totals["spam"]);
+								double hamProb = (this.ratings.get(word).get("ham") / this.totals.get("ham"));
+								double spamProb = (this.ratings.get(word).get("spam") / this.totals.get("spam"));
 								double fullProb = (spamProb / (spamProb + hamProb));
 								hit.put(word, fullProb);
 							}
